@@ -1,0 +1,17 @@
+{
+  "name": "postcss-fluidvars",
+  "version": "1.0.0",
+  "description": "Automatic Fluid Variables for PostCSS",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest test.js"
+  },
+  "author": "@LiamBigelow",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "peerDependencies": {
+    "postcss": "^8.3.0"
+  }
+}
