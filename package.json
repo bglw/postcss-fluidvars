@@ -13,5 +13,23 @@
   },
   "peerDependencies": {
     "postcss": "^8.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bglw/postcss-fluidvars.git"
+  },
+  "keywords": [
+    "postcss",
+    "fluid",
+    "typography",
+    "type",
+    "custom",
+    "properties",
+    "variables",
+    "responsive"
+  ],
+  "bugs": {
+    "url": "https://github.com/bglw/postcss-fluidvars/issues"
+  },
+  "homepage": "https://github.com/bglw/postcss-fluidvars#readme"
 }
