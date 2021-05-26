@@ -208,7 +208,7 @@ test('Should work with long digit variables', () => {
         --s-design-min: 1200;
     }
     h1 {
-        font-size: var(--s-3355757-8655757);
+        max-width: var(--s-3355757-8655757);
     }
     `;
     
@@ -219,7 +219,7 @@ test('Should work with long digit variables', () => {
         --s-3355757-8655757: clamp(3355757px, calc(3355757px + 5300000 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 8655757px);
     }
     h1 {
-        font-size: var(--s-3355757-8655757);
+        max-width: var(--s-3355757-8655757);
     }
     `;
     
@@ -463,3 +463,41 @@ test('Do nothing if nothing needs to be done', () => {
     
     return run(input, output);
 });
+
+test('Duplicate rules should be filtered out without affecting subsequent rules', () => {
+    const input = `.component {
+        padding: var(--s-40-80);
+        padding-left: var(--s-20-80);
+        padding-right: var(--s-20-80);
+        box-sizing: content-box;
+      }
+      body {
+        --s-design-min: 800;
+        --s-design-max: 1600;
+      }
+      .c-header__content {
+        max-width: var(--s-335-865);
+        font-size: var(--s-20-24);
+      }`;
+
+    const output = `.component {
+        padding: var(--s-40-80);
+        padding-left: var(--s-20-80);
+        padding-right: var(--s-20-80);
+        box-sizing: content-box;
+      }
+      body {
+        --s-design-min: 800;
+        --s-design-max: 1600;
+        --s-20-24: clamp(20px, calc(20px + 4 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 24px);
+        --s-20-80: clamp(20px, calc(20px + 60 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 80px);
+        --s-40-80: clamp(40px, calc(40px + 40 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 80px);
+        --s-335-865: clamp(335px, calc(335px + 530 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 865px);
+      }
+      .c-header__content {
+        max-width: var(--s-335-865);
+        font-size: var(--s-20-24);
+      }`
+
+      return run(input, output, {namespace: 's'});
+})

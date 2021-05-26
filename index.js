@@ -75,7 +75,7 @@ module.exports = (opts = {}) => {
                 let matches = [];
                 while (matches = matchRegex.exec(decl.value)) {
                     let [,variable, from, to, unit] = matches;
-                    if (variables[variable]) return;
+                    if (variables[variable]) continue;
                     
                     const fromNumStr = parseNumStr(from);
                     const toNumStr = parseNumStr(to);
