@@ -176,7 +176,6 @@ test('Fractionals', () => {
     return run(input, output);
 });
 
-
 test('Should keep min precision', () => {
     const input = `
     :root {
@@ -200,6 +199,31 @@ test('Should keep min precision', () => {
     `;
     
     return run(input, output);
+});
+
+test('Should work with long digit variables', () => {
+    const input = `
+    :root {
+        --s-design-max: 1300;
+        --s-design-min: 1200;
+    }
+    h1 {
+        font-size: var(--s-3355757-8655757);
+    }
+    `;
+    
+    const output = `
+    :root {
+        --s-design-max: 1300;
+        --s-design-min: 1200;
+        --s-3355757-8655757: clamp(3355757px, calc(3355757px + 5300000 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 8655757px);
+    }
+    h1 {
+        font-size: var(--s-3355757-8655757);
+    }
+    `;
+    
+    return run(input, output, {namespace: 's'});
 });
 
 test('Should define each variable once', () => {
