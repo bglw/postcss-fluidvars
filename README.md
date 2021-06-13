@@ -151,7 +151,7 @@ postcss([
 Or use your bundler loader of choice.
 
 ### Namespace
-To avoid clashing with any existing variables, you can provide a namespace.
+To avoid clashing with any existing variables, you can provide a namespace. This also helps fix an issue where older versions of Sass perform math on the values — for some reason it won't mess with it when it has a namespace.
 ```js
 const fluidvars = require('postcss-fluidvars');
 postcss([
