@@ -20,6 +20,7 @@ module.exports = (opts = {}) => {
                 negative: `[-n]?`,
                 integer: `\\d+`,
                 fractional: `(?:p\\d+)?`,
+                breakpoint: `(?:at\\d+)?`,
                 separator: `-`,
                 unit: `[a-z]*`,
                 close: `\\)`,
@@ -30,7 +31,7 @@ module.exports = (opts = {}) => {
               return `(${s})`;
             };
             
-            const testRegexString = [r.open, r.prefix, r.number, r.separator, r.number, r.unit, r.close].join('');
+            const testRegexString = [r.open, r.prefix, r.number, r.breakpoint, r.separator, r.number, r.unit, r.breakpoint, r.close].join('');
             const testRegex = new RegExp(testRegexString, 'i');
             
             const matchRegexString = [
@@ -38,9 +39,11 @@ module.exports = (opts = {}) => {
                 r.capture([
                   r.prefix,
                   r.capture(r.number),
+                  r.capture(r.breakpoint),
                   r.separator,
                   r.capture(r.number),
                   r.capture(r.unit),
+                  r.capture(r.breakpoint),
                 ]),
                 r.close,
             ].join('');
@@ -74,16 +77,20 @@ module.exports = (opts = {}) => {
                 
                 let matches = [];
                 while (matches = matchRegex.exec(decl.value)) {
-                    let [,variable, from, to, unit] = matches;
+                    let [,variable, from, fromBp, to, unit, toBp] = matches;
                     if (variables[variable]) continue;
                     
                     const fromNumStr = parseNumStr(from);
                     const toNumStr = parseNumStr(to);
+                    const fromBpStr = parseBpStr(fromBp);
+                    const toBpStr = parseBpStr(toBp);
                     variables[variable] = {
                         from_str: fromNumStr,
                         to_str: toNumStr,
                         from: parseVal(fromNumStr),
+                        from_breakpoint: parseVal(fromBpStr),
                         to: parseVal(toNumStr),
+                        to_breakpoint: parseVal(toBpStr),
                         unit: unit.replace('pc', '%')
                     };
                 }
@@ -110,12 +117,10 @@ module.exports = (opts = {}) => {
 }
 
 const addFluidVariables = (injectionPoints, variables, options) => {
-    const designVar = `--${options.prefix}design`;
-    const vwCalc = `(100vw - var(${designVar}-min) * 1px) / (var(${designVar}-max) - var(${designVar}-min))`;
-
     const sortedVariables = Object.entries(variables).sort(varSort);
 
     sortedVariables.forEach(([prop, vals]) => {
+        const vwCalc = buildVwCalc(vals, options);
         const unit = vals.unit || `px`;
         const from = vals.from;
         const to = vals.to;
@@ -130,6 +135,21 @@ const addFluidVariables = (injectionPoints, variables, options) => {
     });
 }
 
+const buildVwCalc = (vals, options) => {
+    const designVar = `--${options.prefix}design`;
+
+    if (!vals.to_breakpoint && !vals.from_breakpoint)
+        return `(100vw - var(${designVar}-min) * 1px) / (var(${designVar}-max) - var(${designVar}-min))`;
+
+    if (vals.to_breakpoint && !vals.from_breakpoint)
+        return `(100vw - var(${designVar}-min) * 1px) / (${vals.to_breakpoint} - var(${designVar}-min))`;
+
+    if (!vals.to_breakpoint && vals.from_breakpoint)
+        return `(100vw - ${vals.from_breakpoint}px) / (var(${designVar}-max) - ${vals.from_breakpoint})`;
+
+    return `(100vw - ${vals.from_breakpoint}px) / ${vals.to_breakpoint - vals.from_breakpoint}`;
+}
+
 const precision = (str) => {
     return str.split('.')[1]?.length;
 }
@@ -139,6 +159,8 @@ const parseNumStr = (str) => {
         .replace(/^n/, '-')
         .replace(/(\d)p(\d)/, '$1.$2');
 }
+
+const parseBpStr = str => str ? str.replace(/^at/, '') : "0";
 
 const parseVal = (val) => {
     if (/-?\d+(?:\.\d+)/.test(val)) return parseFloat(val);
@@ -150,6 +172,8 @@ const parseVal = (val) => {
  * Useful for debugging the final CSS, also looks nice.
  */
 const varSort = ([,a], [,b]) => {
+    if (a.from_breakpoint !== b.from_breakpoint) return a.from_breakpoint - b.from_breakpoint;
+    if (a.to_breakpoint !== b.to_breakpoint) return a.to_breakpoint - b.to_breakpoint;
     if (a.from !== b.from) return a.from - b.from;
     if (a.to !== b.to) return a.to - b.to;
     if (a.unit > b.unit) return 1;

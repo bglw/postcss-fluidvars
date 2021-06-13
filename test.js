@@ -304,6 +304,41 @@ test('Inject nested rules', () => {
     return run(input, output);
 });
 
+test('Inject bespoke rules', () => {
+    const input = `
+    :root {
+        --design-max: 1300;
+        --design-min: 1200;
+    }
+    p {
+        width: var(--100-1000);
+        font-size: var(--10p5at500-20p5emat1000);
+    }
+    h1 {
+        font-size: var(--10at800-100at1200);
+    }
+    `;
+    
+    const output = `
+    :root {
+        --design-max: 1300;
+        --design-min: 1200;
+        --100-1000: clamp(100px, calc(100px + 900 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 1000px);
+        --10p5at500-20p5emat1000: clamp(10.5em, calc(10.5em + 10 * (100vw - 500px) / 500), 20.5em);
+        --10at800-100at1200: clamp(10px, calc(10px + 90 * (100vw - 800px) / 400), 100px);
+    }
+    p {
+        width: var(--100-1000);
+        font-size: var(--10p5at500-20p5emat1000);
+    }
+    h1 {
+        font-size: var(--10at800-100at1200);
+    }
+    `;
+    
+    return run(input, output);
+});
+
 test('Warn when bad design variable found', () => {
     const input = `
     :root {

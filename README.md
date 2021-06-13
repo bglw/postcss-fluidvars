@@ -128,6 +128,17 @@ Do note that _all_ variables will be injected at _every_ spot where you're chang
 <section> <!-- 1600px design herein --> </section>
 <section class="christmas"> <!-- 1200px design herein --> </section>
 ```
+If you really must use bespoke values throughout your CSS, you can define custom min/max values in the variable itself.  
+For example, to use a design-min of 400px and a design-max of 800px:
+```css
+.item {
+    font-size: var(--10at400-20at800);
+}
+```
+This won't create a new injection point and will create a one-off variable for that spot, which helps tackle any code bloat issue. Try to avoid too many of these lest you sacrifice readability and design consistency.  
+
+## Keep it simple
+The rule `--n10p5at768-n20p45emat1366` is technically valid, but exceedingly hard to get your head around.
 
 ## Configuration
 Classic use:
