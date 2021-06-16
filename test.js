@@ -120,6 +120,31 @@ test('Specified units', () => {
     return run(input, output);
 });
 
+test('Arrange clamp min/max by size', () => {
+    const input = `
+    :root {
+        --design-max: 1300;
+        --design-min: 800;
+    }
+    p {
+        padding: var(--10-5);
+    }
+    `;
+    
+    const output = `
+    :root {
+        --design-max: 1300;
+        --design-min: 800;
+        --10-5: clamp(5px, calc(10px + -5 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 10px);
+    }
+    p {
+        padding: var(--10-5);
+    }
+    `;
+    
+    return run(input, output);
+});
+
 test('Negative Numbers', () => {
     const input = `
     :root {
@@ -137,8 +162,8 @@ test('Negative Numbers', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        ---10--100: clamp(-10px, calc(-10px + -90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), -100px);
-        --n10-n100: clamp(-10px, calc(-10px + -90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), -100px);
+        ---10--100: clamp(-100px, calc(-10px + -90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), -10px);
+        --n10-n100: clamp(-100px, calc(-10px + -90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), -10px);
         --n10-20: clamp(-10px, calc(-10px + 30 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 20px);
     }
     h1 {

@@ -125,12 +125,14 @@ const addFluidVariables = (injectionPoints, variables, options) => {
         const from = vals.from;
         const to = vals.to;
         let diff = to-from;
+        const clampMin = diff > 0 ? from : to;
+        const clampMax = diff > 0 ? to : from;
         if (diff % 1 !== 0) { // isFloat
             const minPrecision = Math.min(precision(vals.from_str), precision(vals.to_str))
             diff = diff.toFixed(minPrecision);
         }
 
-        const value = `clamp(${from}${unit}, calc(${from}${unit} + ${diff} * ${vwCalc}), ${to}${unit})`;
+        const value = `clamp(${clampMin}${unit}, calc(${from}${unit} + ${diff} * ${vwCalc}), ${clampMax}${unit})`;
         injectionPoints.forEach(block => block.append(postcss.decl({prop, value})));
     });
 }
