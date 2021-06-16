@@ -40,9 +40,9 @@ CSS Variables are only defined once, so `var(--10-100)` in the above example can
 By default `px` is assumed, allowing you to drop the unit. Other units can be specified.
 ```css
 h1 {
-    // 4px -> 6px
+    /* 4px -> 6px */
     line-height: var(--4-6);
-    // 4em -> 6em
+    /* 4em -> 6em */
     font-size: var(--4-6em);
 }
 ```
@@ -51,12 +51,12 @@ h1 {
 Negative values are available, either with another hyphen or an `n` for readability.
 ```css
 p {
-    // -20px -> -40px;
-    margin-top: var(--n20-n40);  // Equivalent
-    margin-top: var(---20--40);  // Equivalent
+    /* -20px -> -40px; */
+    margin-top: var(--n20-n40);  /* Equivalent */
+    margin-top: var(---20--40);  /* Equivalent */
 }
 div {
-    // 10rem -> -10rem
+    /* 10rem -> -10rem */
     left: var(--10-n10rem);
 }
 ```
@@ -65,7 +65,7 @@ div {
 Decimals are available using `p`, but the syntax hampers things making them sufficiently ugly that I'd avoid them where possible.
 ```css
 h1 {
-    // 4.5rem -> 6.3rem
+    /* 4.5rem -> 6.3rem */
     font-size: var(--4p5-6p3rem);
 }
 ```
