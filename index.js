@@ -98,6 +98,7 @@ module.exports = (opts = {}) => {
 
             const hasVariables = Object.keys(variables).length;
             if (hasVariables) {
+                addCalcVariable(injectionPoints, options);
                 addFluidVariables(injectionPoints, variables, options);
                 if (!hasDesignMinRule) {
                     result.warn(`No design min rule found in CSS. Expected "${designRuleMin}" to be defined somewhere.`);
@@ -114,6 +115,13 @@ module.exports = (opts = {}) => {
             }
         }
     }
+}
+
+const addCalcVariable = (injectionPoints, options) => {
+    const designVar = `--${options.prefix}design`;
+    const prop = "--fv-calc";
+    const value = `(100vw - var(${designVar}-min) * 1px) / (var(${designVar}-max) - var(${designVar}-min))`;
+    injectionPoints.forEach(block => block.append(postcss.decl({prop, value})));
 }
 
 const addFluidVariables = (injectionPoints, variables, options) => {
@@ -141,7 +149,7 @@ const buildVwCalc = (vals, options) => {
     const designVar = `--${options.prefix}design`;
 
     if (!vals.to_breakpoint && !vals.from_breakpoint)
-        return `(100vw - var(${designVar}-min) * 1px) / (var(${designVar}-max) - var(${designVar}-min))`;
+        return `var(--fv-calc)`;
 
     if (vals.to_breakpoint && !vals.from_breakpoint)
         return `(100vw - var(${designVar}-min) * 1px) / (${vals.to_breakpoint} - var(${designVar}-min))`;

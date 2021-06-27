@@ -20,7 +20,8 @@ h1 {
 :root {
     --design-min: 800;
     --design-max: 1600;
-    --40-60: clamp(40px, calc(40px + 20 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 60px);
+    --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+    --40-60: clamp(40px, calc(40px + 20 * var(--fv-calc)), 60px);
 }
 h1 {
     font-size: var(--40-60);
@@ -99,12 +100,14 @@ h1 {
 :root {
     --design-min: 800;
     --design-max: 1600;
-    --40-60: clamp(40px, calc(40px + 20 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 60px);
+    --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+    --40-60: clamp(40px, calc(40px + 20 * var(--fv-calc)), 60px);
 }
 
 .layout {
     --design-min: 1200;
-    --40-60: clamp(40px, calc(40px + 20 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 60px);
+    --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+    --40-60: clamp(40px, calc(40px + 20 * var(--fv-calc)), 60px);
 }
 
 h1 {

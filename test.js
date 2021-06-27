@@ -33,7 +33,8 @@ test('Core functionality', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     h1 {
         font-size: var(--10-100);
@@ -58,7 +59,8 @@ test('Namespace', () => {
     :root {
         --pineapple-design-max: 1300;
         --pineapple-design-min: 1200;
-        --pineapple-10-100: clamp(10px, calc(10px + 90 * (100vw - var(--pineapple-design-min) * 1px) / (var(--pineapple-design-max) - var(--pineapple-design-min))), 100px);
+        --fv-calc: (100vw - var(--pineapple-design-min) * 1px) / (var(--pineapple-design-max) - var(--pineapple-design-min));
+        --pineapple-10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     h1 {
         font-size: var(--pineapple-10-100);
@@ -84,8 +86,9 @@ test('Shorthand rules', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        --10-20: clamp(10px, calc(10px + 10 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 20px);
-        --20-40: clamp(20px, calc(20px + 20 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 40px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-20: clamp(10px, calc(10px + 10 * var(--fv-calc)), 20px);
+        --20-40: clamp(20px, calc(20px + 20 * var(--fv-calc)), 40px);
     }
     div {
         margin: var(--10-20) 100px var(--20-40);
@@ -110,7 +113,8 @@ test('Specified units', () => {
     :root {
         --design-max: 1300;
         --design-min: 800;
-        --5-10rem: clamp(5rem, calc(5rem + 5 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 10rem);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --5-10rem: clamp(5rem, calc(5rem + 5 * var(--fv-calc)), 10rem);
     }
     p {
         padding: var(--5-10rem);
@@ -135,7 +139,8 @@ test('Arrange clamp min/max by size', () => {
     :root {
         --design-max: 1300;
         --design-min: 800;
-        --10-5: clamp(5px, calc(10px + -5 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 10px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-5: clamp(5px, calc(10px + -5 * var(--fv-calc)), 10px);
     }
     p {
         padding: var(--10-5);
@@ -162,9 +167,10 @@ test('Negative Numbers', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        ---10--100: clamp(-100px, calc(-10px + -90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), -10px);
-        --n10-n100: clamp(-100px, calc(-10px + -90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), -10px);
-        --n10-20: clamp(-10px, calc(-10px + 30 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 20px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        ---10--100: clamp(-100px, calc(-10px + -90 * var(--fv-calc)), -10px);
+        --n10-n100: clamp(-100px, calc(-10px + -90 * var(--fv-calc)), -10px);
+        --n10-20: clamp(-10px, calc(-10px + 30 * var(--fv-calc)), 20px);
     }
     h1 {
         margin-top: var(---10--100);
@@ -191,7 +197,8 @@ test('Fractionals', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        --1p5-2p2rem: clamp(1.5rem, calc(1.5rem + 0.7 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 2.2rem);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --1p5-2p2rem: clamp(1.5rem, calc(1.5rem + 0.7 * var(--fv-calc)), 2.2rem);
     }
     h1 {
         font-size: var(--1p5-2p2rem);
@@ -216,7 +223,8 @@ test('Should keep min precision', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        --1p55555-20p222rem: clamp(1.55555rem, calc(1.55555rem + 18.666 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 20.222rem);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --1p55555-20p222rem: clamp(1.55555rem, calc(1.55555rem + 18.666 * var(--fv-calc)), 20.222rem);
     }
     h1 {
         font-size: var(--1p55555-20p222rem);
@@ -241,7 +249,8 @@ test('Should work with long digit variables', () => {
     :root {
         --s-design-max: 1300;
         --s-design-min: 1200;
-        --s-3355757-8655757: clamp(3355757px, calc(3355757px + 5300000 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 8655757px);
+        --fv-calc: (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min));
+        --s-3355757-8655757: clamp(3355757px, calc(3355757px + 5300000 * var(--fv-calc)), 8655757px);
     }
     h1 {
         max-width: var(--s-3355757-8655757);
@@ -273,10 +282,11 @@ test('Should define each variable once', () => {
     :root {
         --design-max: 1300;
         --design-min: 800;
-        --5-10: clamp(5px, calc(5px + 5 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 10px);
-        --5-10rem: clamp(5rem, calc(5rem + 5 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 10rem);
-        --10-15: clamp(10px, calc(10px + 5 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 15px);
-        --10-20: clamp(10px, calc(10px + 10 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 20px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --5-10: clamp(5px, calc(5px + 5 * var(--fv-calc)), 10px);
+        --5-10rem: clamp(5rem, calc(5rem + 5 * var(--fv-calc)), 10rem);
+        --10-15: clamp(10px, calc(10px + 5 * var(--fv-calc)), 15px);
+        --10-20: clamp(10px, calc(10px + 10 * var(--fv-calc)), 20px);
     }
     p {
         padding: var(--5-10rem);
@@ -312,8 +322,9 @@ test('Inject nested rules', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
-        --100-1000: clamp(100px, calc(100px + 900 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 1000px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
+        --100-1000: clamp(100px, calc(100px + 900 * var(--fv-calc)), 1000px);
     }
     p {
         width: var(--100-1000);
@@ -321,8 +332,9 @@ test('Inject nested rules', () => {
     h1 {
         --design-min: 100;
         font-size: var(--10-100);
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
-        --100-1000: clamp(100px, calc(100px + 900 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 1000px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
+        --100-1000: clamp(100px, calc(100px + 900 * var(--fv-calc)), 1000px);
     }
     `;
     
@@ -348,7 +360,8 @@ test('Inject bespoke rules', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        --100-1000: clamp(100px, calc(100px + 900 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 1000px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --100-1000: clamp(100px, calc(100px + 900 * var(--fv-calc)), 1000px);
         --10p5at500-20p5emat1000: clamp(10.5em, calc(10.5em + 10 * (100vw - 500px) / 500), 20.5em);
         --10at800-100at1200: clamp(10px, calc(10px + 90 * (100vw - 800px) / 400), 100px);
     }
@@ -379,7 +392,8 @@ test('Warn when bad design variable found', () => {
     :root {
         --design-max: 1300px;
         --design-min: 1200;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     h1 {
         font-size: var(--10-100);
@@ -432,43 +446,53 @@ test('Warn when too many design variables', () => {
     :root {
         --design-max: 1300;
         --design-min: 1200;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     div {
         --design-min: 1000;
-        --10-100: clamp(10px, calc(10px + 90 * (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min))), 100px);
+        --fv-calc: (100vw - var(--design-min) * 1px) / (var(--design-max) - var(--design-min));
+        --10-100: clamp(10px, calc(10px + 90 * var(--fv-calc)), 100px);
     }
     h1 {
         font-size: var(--10-100);
@@ -549,10 +573,11 @@ test('Duplicate rules should be filtered out without affecting subsequent rules'
       body {
         --s-design-min: 800;
         --s-design-max: 1600;
-        --s-20-24: clamp(20px, calc(20px + 4 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 24px);
-        --s-20-80: clamp(20px, calc(20px + 60 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 80px);
-        --s-40-80: clamp(40px, calc(40px + 40 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 80px);
-        --s-335-865: clamp(335px, calc(335px + 530 * (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min))), 865px);
+        --fv-calc: (100vw - var(--s-design-min) * 1px) / (var(--s-design-max) - var(--s-design-min));
+        --s-20-24: clamp(20px, calc(20px + 4 * var(--fv-calc)), 24px);
+        --s-20-80: clamp(20px, calc(20px + 60 * var(--fv-calc)), 80px);
+        --s-40-80: clamp(40px, calc(40px + 40 * var(--fv-calc)), 80px);
+        --s-335-865: clamp(335px, calc(335px + 530 * var(--fv-calc)), 865px);
       }
       .c-header__content {
         max-width: var(--s-335-865);
